@@ -30,6 +30,8 @@ public class Controleur extends HttpServlet {
     private String urlGroupes;
     private String urlEtudiant;
     private String urlCreateEtudiant;
+    private String urlEditEtudiant;
+    private String urlRemoveEtudiant;
     private String urlConsultationAbsences;
     private String urlConsultationNotes;
 
@@ -43,6 +45,8 @@ public class Controleur extends HttpServlet {
         urlGroupes = getServletConfig().getInitParameter("urlGroupes");
         urlEtudiant = getServletConfig().getInitParameter("urlEtudiant");
         urlCreateEtudiant = getServletConfig().getInitParameter("urlCreateEtudiant");
+        urlEditEtudiant = getServletConfig().getInitParameter("urlEditEtudiant");
+        urlRemoveEtudiant = getServletConfig().getInitParameter("urlRemoveEtudiant");
         urlConsultationAbsences = getServletConfig().getInitParameter("urlConsultationAbsences");
         urlConsultationNotes = getServletConfig().getInitParameter("urlConsultationNotes");
 
@@ -123,7 +127,13 @@ public class Controleur extends HttpServlet {
         } else if (action.equals("/etudiant")) {
             doEtudiant(request, response);
 
-        } else if (action.equals("/consultationAbsences")) {
+        } else if (action.equals("/editEtudiant")) {
+            doEditEtudiant(request, response);
+
+        } else if (action.equals("/removeEtudiant")) {
+            doRemoveEtudiant(request, response);
+
+        }else if (action.equals("/consultationAbsences")) {
 
             doConsultationAbsences(request, response);
         } else if (action.equals("/consultationNotes")) {
@@ -139,38 +149,6 @@ public class Controleur extends HttpServlet {
         }
     }
 
-    private void doCreateEtudiant(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        if(request.getParameter("submit") != null) {
-			String prenom = request.getParameter("prenom");
-			String nom = request.getParameter("nom");
-			Integer id_groupe = Integer.parseInt(request.getParameter("groupe"));
-			Groupe groupe = GroupeDAO.getFromId(id_groupe);
-
-			EtudiantDAO.create(prenom, nom, groupe);
-
-			// Récupérer les étudiants
-			List<Etudiant> etudiants = EtudiantDAO.getAll();
-
-			// Ajouter les étudiants à la requête pour affichage
-			request.setAttribute("etudiants", etudiants);
-			request.setAttribute("success", true);
-
-			request.setAttribute("content", urlListeEtudiants);
-			loadJSP(urlGestionTemplate, request, response);
-		} else {
-        	// Récupérer les étudiants
-			List<Groupe> groupes = GroupeDAO.getAll();
-
-			// Ajouter les étudiants à la requête pour affichage
-			request.setAttribute("groupes", groupes);
-
-			request.setAttribute("content", urlCreateEtudiant);
-			loadJSP(urlGestionTemplate, request, response);
-		}
-    }
-
     // /////////////////////// ACCUEIL
     //
     private void doAcceuil(HttpServletRequest request,
@@ -180,6 +158,103 @@ public class Controleur extends HttpServlet {
         request.setAttribute("content", urlAccueil);
         loadJSP(urlGestionTemplate, request, response);
     }
+
+    private void doEditEtudiant(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        if (request.getParameter("submit") != null) {
+            Integer etu_id = Integer.parseInt(request.getParameter("id"));
+            Etudiant etudiant = EtudiantDAO.retrieveById(etu_id);
+
+            String prenom = request.getParameter("prenom");
+            String nom = request.getParameter("nom");
+            int id_groupe = Integer.parseInt(request.getParameter("groupe"));
+            Groupe groupe = GroupeDAO.retrieveById(id_groupe);
+
+            etudiant.setPrenom(prenom);
+            etudiant.setNom(nom);
+            etudiant.setGroupe(groupe);
+
+            EtudiantDAO.update(etudiant);
+
+            // Récupérer les étudiants
+            List<Etudiant> etudiants = EtudiantDAO.getAll();
+
+            // Ajouter les étudiants à la requête pour affichage
+            request.setAttribute("etudiants", etudiants);
+            request.setAttribute("add", "");
+            request.setAttribute("edit", "success");
+            request.setAttribute("remove", "");
+
+            request.setAttribute("content", urlListeEtudiants);
+            loadJSP(urlGestionTemplate, request, response);
+        } else {
+            Integer etu_id = Integer.parseInt(request.getParameter("id"));
+            Etudiant etudiant = EtudiantDAO.retrieveById(etu_id);
+            List<Groupe> groupes = GroupeDAO.getAll();
+
+            // Ajouter les groupes à la requête pour affichage
+            request.setAttribute("groupes", groupes);
+
+            request.setAttribute("etudiant", etudiant);
+
+            request.setAttribute("content", urlEditEtudiant);
+            loadJSP(urlGestionTemplate, request, response);
+        }
+    }
+
+    private void doRemoveEtudiant(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Integer etu_id = Integer.parseInt(request.getParameter("id"));
+
+        EtudiantDAO.remove(etu_id);
+
+        // Récupérer les étudiants
+        List<Etudiant> etudiants = EtudiantDAO.getAll();
+
+        // Ajouter les étudiants à la requête pour affichage
+        request.setAttribute("etudiants", etudiants);
+        request.setAttribute("add", "");
+        request.setAttribute("edit", "");
+        request.setAttribute("remove", "success");
+
+        request.setAttribute("content", urlListeEtudiants);
+        loadJSP(urlGestionTemplate, request, response);
+    }
+
+    private void doCreateEtudiant(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        if (request.getParameter("submit") != null) {
+            String prenom = request.getParameter("prenom");
+            String nom = request.getParameter("nom");
+            int id_groupe = Integer.parseInt(request.getParameter("groupe"));
+            Groupe groupe = GroupeDAO.retrieveById(id_groupe);
+
+            EtudiantDAO.create(prenom, nom, groupe);
+
+            // Récupérer les étudiants
+            List<Etudiant> etudiants = EtudiantDAO.getAll();
+
+            // Ajouter les étudiants à la requête pour affichage
+            request.setAttribute("etudiants", etudiants);
+            request.setAttribute("add", "success");
+            request.setAttribute("edit", "");
+            request.setAttribute("remove", "");
+
+            request.setAttribute("content", urlListeEtudiants);
+            loadJSP(urlGestionTemplate, request, response);
+        } else {
+            // Récupérer les étudiants
+            List<Groupe> groupes = GroupeDAO.getAll();
+
+            // Ajouter les groupes à la requête pour affichage
+            request.setAttribute("groupes", groupes);
+
+            request.setAttribute("content", urlCreateEtudiant);
+            loadJSP(urlGestionTemplate, request, response);
+        }
+    }
+
 
     // /////////////////////// Liste des étudiants
     //
@@ -191,7 +266,9 @@ public class Controleur extends HttpServlet {
 
         // Ajouter les étudiants à la requête pour affichage
         request.setAttribute("etudiants", etudiants);
-        request.setAttribute("success", false);
+        request.setAttribute("add", "");
+        request.setAttribute("edit", "");
+        request.setAttribute("remove", "");
 
         request.setAttribute("content", urlListeEtudiants);
         loadJSP(urlGestionTemplate, request, response);
