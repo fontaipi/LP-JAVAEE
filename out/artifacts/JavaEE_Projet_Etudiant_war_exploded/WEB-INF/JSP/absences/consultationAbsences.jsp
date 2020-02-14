@@ -7,32 +7,30 @@
 <%@ page import="projet.data.*"%>
 
 <%-- USEBEAN --%>
-<jsp:useBean id="listeAbsencesEtudiants" type="java.util.Map<projet.data.Etudiant,java.lang.Integer>" scope="request"/>
+<jsp:useBean id="etudiants" type="java.util.List<projet.data.Etudiant>" scope="request"/>
 
-<!--% ou en JAVA
-Map<Etudiant,Integer> listeAbsencesEtudiants = (Map<Etudiant,Integer>)request.getAttribute("listeAbsencesEtudiants");
-%-->
 
-<div style="background-color:#D8F6CE">
+<div>
 
 <!-- AFFICHAGE en fonction du groupe ou de ALL  -->
 <h3>Consultation des absences</h3>
 
 <!-- AFFICHAGE des notes des étudiants  -->
-<% if (listeAbsencesEtudiants.size() != 0) {%>
+<% if (etudiants.size() != 0) {%>
 
 <!-- tableau de notes  -->
-<table border="1">
+<table >
 <%
 int totalAbsences = 0;
-for (Map.Entry<Etudiant, Integer> entry : listeAbsencesEtudiants.entrySet()) {
-	Etudiant etudiant = entry.getKey();
-	Integer absences = entry.getValue();
+for (Etudiant etudiant : etudiants) {
+	Integer absences = etudiant.getNbAbsences();
 %>
 	<tr>
 		<td><a href="<%= application.getContextPath()%>/do/etudiant?id=<%=etudiant.getId()%>"><%=etudiant.getPrenom()%> <%=etudiant.getNom()%></a></td>
-		<td><%=etudiant.getGroupe()%></td>
+		<td><%=etudiant.getGroupe().getNom()%></td>
 		<td><%=absences%></td>
+		<td><a href="<%=application.getContextPath()%>/do/addAbsence?id=<%=etudiant.getId()%>" class="btn btn-success btn-circle btn-sm"><i class="fas fa-plus"></i></a></td>
+		<td><a href="<%=application.getContextPath()%>/do/removeAbsence?id=<%=etudiant.getId()%>" class="btn btn-danger btn-circle btn-sm"><i class="fas fa-minus"></i></a></td>
 	</tr>
 <%
 totalAbsences = totalAbsences + absences;

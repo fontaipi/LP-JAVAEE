@@ -43,7 +43,7 @@
 <body>
 
 <h1>Liste des groupes présents en BD</h1>
-<p><a href="<%= getServletContext().getContextPath()%>/do/etudiants">voir les étudiants</a></p>
+<p><a href="<%= getServletContext().getContextPath()%>/do/listEtudiants">voir les étudiants</a></p>
 
 <!-- tableau de groupes  -->
 <table>

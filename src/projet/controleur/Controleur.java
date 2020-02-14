@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 @SuppressWarnings("serial")
@@ -136,19 +137,29 @@ public class Controleur extends HttpServlet {
             doRemoveEtudiant(request, response);
 
         } else if (action.equals("/consultationAbsences")) {
-
             doConsultationAbsences(request, response);
+
+        } else if (action.equals("/addAbsence")) {
+            doAddAbsence(request, response);
+
+        } else if (action.equals("/removeAbsence")) {
+            doRemoveAbsence(request, response);
+
         } else if (action.equals("/consultationNotes")) {
             doConsultationNotes(request, response);
 
         } else if (action.equals("/groupes")) {
             doGroupes(request, response);
+
         } else if (action.equals("/createGroupe")) {
             doCreateGroupe(request, response);
+
         } else if (action.equals("/editGroupe")) {
             doEditGroupe(request, response);
+
         } else if (action.equals("/removeGroupe")) {
             doRemoveGroupe(request, response);
+
         } else {
             // Autres cas
             doAcceuil(request, response);
@@ -396,11 +407,11 @@ public class Controleur extends HttpServlet {
 
         int count = 0;
         for (Etudiant etudiant : etudiants) {
-             if (etudiant.getGroupe().getId() == groupe_id) {
-                 count++;
-             }
+            if (etudiant.getGroupe().getId() == groupe_id) {
+                count++;
+            }
 
-         }
+        }
         if (count == 0) {
             GroupeDAO.remove(groupe_id);
             request.setAttribute("remove", "success");
@@ -443,15 +454,12 @@ public class Controleur extends HttpServlet {
     private void doConsultationNotes(HttpServletRequest request,
                                      HttpServletResponse response) throws ServletException, IOException {
 
-        // Récupérer les étudiants en fonction du filtre groupe
-        // Récupérer en bd
-        // Récupérer l'association Etudiant/Note pour affichage
-        // map étu/notes
+        // Récupérer les étudiants
+        List<Etudiant> etudiants = EtudiantDAO.getAll();
 
-        //
-        //request.setAttribute("listeNotesEtudiants", listeNotesEtudiants);
+        // Ajouter les étudiants à la requête pour affichage
+        request.setAttribute("etudiants", etudiants);
 
-        //
         request.setAttribute("content", urlConsultationNotes);
         loadJSP(urlGestionTemplate, request, response);
     }
@@ -462,17 +470,39 @@ public class Controleur extends HttpServlet {
                                         HttpServletResponse response) throws ServletException, IOException {
 
         // Récupérer les étudiants
-        // Récupérer en bd
+        List<Etudiant> etudiants = EtudiantDAO.getAll();
 
-        // Récupérer l'association Etudiant/abscenes pour affichage
-        // map étu absences
+        // Ajouter les étudiants à la requête pour affichage
+        request.setAttribute("etudiants", etudiants);
 
-        //
-        //request.setAttribute("listeAbsencesEtudiants", listeAbsencesEtudiants);
-
-        //
         request.setAttribute("content", urlConsultationAbsences);
         loadJSP(urlGestionTemplate, request, response);
+    }
+
+    private void doAddAbsence(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Integer etu_id = Integer.parseInt(request.getParameter("id"));
+        Etudiant etudiant = EtudiantDAO.retrieveById(etu_id);
+
+        etudiant.setNbAbsences(etudiant.getNbAbsences() + 1);
+
+        EtudiantDAO.update(etudiant);
+
+        doConsultationAbsences(request, response);
+    }
+
+    private void doRemoveAbsence(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Integer etu_id = Integer.parseInt(request.getParameter("id"));
+        Etudiant etudiant = EtudiantDAO.retrieveById(etu_id);
+
+        if (etudiant.getNbAbsences() > 0) {
+            etudiant.setNbAbsences(etudiant.getNbAbsences() - 1);
+
+            EtudiantDAO.update(etudiant);
+        }
+
+        doConsultationAbsences(request, response);
     }
 
 
