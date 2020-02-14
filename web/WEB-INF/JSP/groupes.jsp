@@ -6,6 +6,35 @@
 
 <jsp:useBean id="groupes" type="java.util.List<projet.data.Groupe>" scope="request"/>
 
+<jsp:useBean id="add" type="java.lang.String" scope="request"/>
+<jsp:useBean id="edit" type="java.lang.String" scope="request"/>
+<jsp:useBean id="remove" type="java.lang.String" scope="request"/>
+
+<% if (add == "success") {%>
+<div class="alert alert-success" role="alert">
+    Création réussie !
+</div>
+<% } else { %>
+
+<% } %>
+
+<% if (edit == "success") {%>
+<div class="alert alert-success" role="alert">
+    Modification réussie !
+</div>
+<% } else { %>
+
+<% } %>
+
+<% if (remove == "success") {%>
+<div class="alert alert-success" role="alert">
+    Suppression réussie !
+</div>
+<% } else if (remove == "failed"){ %>
+<div class="alert alert-danger" role="alert">
+    Vous devez retirer les étudiants du groupe avant de le supprimer !
+</div>
+<% } %>
 
 <html>
 <head>
@@ -29,6 +58,10 @@
     <tr>
         <td><%=groupe.getNom()%></td>
         <td><%=groupe.getEtudiants().size()%></td>
+        <td>
+            <a href="<%=application.getContextPath()%>/do/editGroupe?id=<%=groupe.getId()%>"><i class="fas fa-edit"></i></a>
+            <a href="<%=application.getContextPath()%>/do/removeGroupe?id=<%=groupe.getId()%>"><i class="fas fa-times"></i></a>
+        </td>
     </tr>
     <% } %>
 </table>

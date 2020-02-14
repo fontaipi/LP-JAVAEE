@@ -39,7 +39,7 @@
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Custom Components:</h6>
+                <h6 class="collapse-header">Gérer les étudiants :</h6>
                 <a class="collapse-item" href="<%= application.getContextPath()%>/do/listeEtudiants">Liste des étudiants</a>
                 <a class="collapse-item" href="<%= application.getContextPath()%>/do/createEtudiant">Ajouter un étudiant</a>
             </div>
@@ -55,8 +55,9 @@
         </a>
         <div id="collapseGroupes" class="collapse" aria-labelledby="headingGroupes" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Custom Utilities:</h6>
+                <h6 class="collapse-header">Gérer les groupes :</h6>
                 <a class="collapse-item" href="<%=request.getContextPath()%>/do/groupes">Liste des groupes</a>
+                <a class="collapse-item" href="<%=request.getContextPath()%>/do/createGroupe">Ajouter un groupe</a>
             </div>
         </div>
     </li>

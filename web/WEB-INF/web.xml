@@ -62,6 +62,14 @@
             <param-value>/WEB-INF/JSP/groupes.jsp</param-value>
         </init-param>
         <init-param>
+            <param-name>urlCreateGroupe</param-name>
+            <param-value>/WEB-INF/JSP/createGroupe.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>urlEditGroupe</param-name>
+            <param-value>/WEB-INF/JSP/editGroupe.jsp</param-value>
+        </init-param>
+        <init-param>
             <param-name>urlEtudiant</param-name>
             <param-value>/WEB-INF/JSP/ficheEtudiant.jsp</param-value>
         </init-param>
@@ -72,10 +80,6 @@
         <init-param>
             <param-name>urlEditEtudiant</param-name>
             <param-value>/WEB-INF/JSP/editEtudiant.jsp</param-value>
-        </init-param>
-        <init-param>
-            <param-name>urlRemoveEtudiant</param-name>
-            <param-value>/WEB-INF/JSP/removeEtudiant.jsp</param-value>
         </init-param>
         <init-param>
             <param-name>urlConsultationAbsences</param-name>

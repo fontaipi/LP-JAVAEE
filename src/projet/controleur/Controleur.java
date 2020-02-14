@@ -28,10 +28,11 @@ public class Controleur extends HttpServlet {
     private String urlAccueil;
     private String urlListeEtudiants;
     private String urlGroupes;
+    private String urlCreateGroupe;
+    private String urlEditGroupe;
     private String urlEtudiant;
     private String urlCreateEtudiant;
     private String urlEditEtudiant;
-    private String urlRemoveEtudiant;
     private String urlConsultationAbsences;
     private String urlConsultationNotes;
 
@@ -43,10 +44,11 @@ public class Controleur extends HttpServlet {
         urlAccueil = getServletConfig().getInitParameter("urlAccueil");
         urlListeEtudiants = getServletConfig().getInitParameter("urlListeEtudiants");
         urlGroupes = getServletConfig().getInitParameter("urlGroupes");
+        urlCreateGroupe = getServletConfig().getInitParameter("urlCreateGroupe");
+        urlEditGroupe = getServletConfig().getInitParameter("urlEditGroupe");
         urlEtudiant = getServletConfig().getInitParameter("urlEtudiant");
         urlCreateEtudiant = getServletConfig().getInitParameter("urlCreateEtudiant");
         urlEditEtudiant = getServletConfig().getInitParameter("urlEditEtudiant");
-        urlRemoveEtudiant = getServletConfig().getInitParameter("urlRemoveEtudiant");
         urlConsultationAbsences = getServletConfig().getInitParameter("urlConsultationAbsences");
         urlConsultationNotes = getServletConfig().getInitParameter("urlConsultationNotes");
 
@@ -133,7 +135,7 @@ public class Controleur extends HttpServlet {
         } else if (action.equals("/removeEtudiant")) {
             doRemoveEtudiant(request, response);
 
-        }else if (action.equals("/consultationAbsences")) {
+        } else if (action.equals("/consultationAbsences")) {
 
             doConsultationAbsences(request, response);
         } else if (action.equals("/consultationNotes")) {
@@ -141,13 +143,18 @@ public class Controleur extends HttpServlet {
 
         } else if (action.equals("/groupes")) {
             doGroupes(request, response);
-        } else if (action.equals("/createEtudiant")) {
-            doCreateEtudiant(request, response);
+        } else if (action.equals("/createGroupe")) {
+            doCreateGroupe(request, response);
+        } else if (action.equals("/editGroupe")) {
+            doEditGroupe(request, response);
+        } else if (action.equals("/removeGroupe")) {
+            doRemoveGroupe(request, response);
         } else {
             // Autres cas
             doAcceuil(request, response);
         }
     }
+
 
     // /////////////////////// ACCUEIL
     //
@@ -227,8 +234,11 @@ public class Controleur extends HttpServlet {
         if (request.getParameter("submit") != null) {
             String prenom = request.getParameter("prenom");
             String nom = request.getParameter("nom");
+
+            Groupe groupe;
             int id_groupe = Integer.parseInt(request.getParameter("groupe"));
-            Groupe groupe = GroupeDAO.retrieveById(id_groupe);
+            groupe = GroupeDAO.retrieveById(id_groupe);
+
 
             EtudiantDAO.create(prenom, nom, groupe);
 
@@ -279,13 +289,133 @@ public class Controleur extends HttpServlet {
     private void doGroupes(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Récupérer les étudiants
+        // Récupérer les groupes
         List<Groupe> groupes = GroupeDAO.getAll();
 
         // Ajouter les étudiants à la requête pour affichage
         request.setAttribute("groupes", groupes);
+        request.setAttribute("add", "");
+        request.setAttribute("edit", "");
+        request.setAttribute("remove", "");
 
         //
+        request.setAttribute("content", urlGroupes);
+        loadJSP(urlGestionTemplate, request, response);
+    }
+
+    private void doCreateGroupe(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        if (request.getParameter("submit") != null) {
+            String nom = request.getParameter("nom");
+
+            Groupe groupe = GroupeDAO.create(nom);
+
+            List<Etudiant> etudiants = EtudiantDAO.getAll();
+            for (Etudiant etudiant : etudiants) {
+                if (request.getParameter("etu_" + etudiant.getId()) != null) {
+                    etudiant.setGroupe(groupe);
+                    EtudiantDAO.update(etudiant);
+                }
+            }
+
+            // Récupérer les étudiants
+            List<Groupe> groupes = GroupeDAO.getAll();
+
+            // Ajouter les étudiants à la requête pour affichage
+            request.setAttribute("groupes", groupes);
+            request.setAttribute("add", "success");
+            request.setAttribute("edit", "");
+            request.setAttribute("remove", "");
+
+            request.setAttribute("content", urlGroupes);
+            loadJSP(urlGestionTemplate, request, response);
+        } else {
+            // Récupérer les étudiants
+            List<Etudiant> etudiants = EtudiantDAO.getAll();
+
+            // Ajouter les groupes à la requête pour affichage
+            request.setAttribute("etudiants", etudiants);
+
+            request.setAttribute("content", urlCreateGroupe);
+            loadJSP(urlGestionTemplate, request, response);
+        }
+    }
+
+    private void doEditGroupe(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        if (request.getParameter("submit") != null) {
+            Integer id_groupe = Integer.parseInt(request.getParameter("id"));
+            Groupe groupe = GroupeDAO.retrieveById(id_groupe);
+
+            String nom = request.getParameter("nom");
+            groupe.setNom(nom);
+
+            GroupeDAO.update(groupe);
+
+            List<Etudiant> etudiants = EtudiantDAO.getAll();
+            for (Etudiant etudiant : etudiants) {
+                if (request.getParameter("etu_" + etudiant.getId()) != null) {
+                    etudiant.setGroupe(groupe);
+                    EtudiantDAO.update(etudiant);
+                }
+            }
+
+            // Récupérer les étudiants
+            List<Groupe> groupes = GroupeDAO.getAll();
+
+            // Ajouter les étudiants à la requête pour affichage
+            request.setAttribute("groupes", groupes);
+            request.setAttribute("add", "");
+            request.setAttribute("edit", "success");
+            request.setAttribute("remove", "");
+
+            request.setAttribute("content", urlGroupes);
+            loadJSP(urlGestionTemplate, request, response);
+        } else {
+            Integer id_groupe = Integer.parseInt(request.getParameter("id"));
+            Groupe groupe = GroupeDAO.retrieveById(id_groupe);
+
+            // Récupérer les étudiants
+            List<Etudiant> etudiants = EtudiantDAO.getAll();
+
+            // Ajouter les groupes à la requête pour affichage
+            request.setAttribute("etudiants", etudiants);
+            request.setAttribute("groupe", groupe);
+
+            request.setAttribute("content", urlEditGroupe);
+            loadJSP(urlGestionTemplate, request, response);
+        }
+    }
+
+    private void doRemoveGroupe(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        Integer groupe_id = Integer.parseInt(request.getParameter("id"));
+        // Récupérer les étudiants
+        List<Etudiant> etudiants = EtudiantDAO.getAll();
+
+        int count = 0;
+        for (Etudiant etudiant : etudiants) {
+             if (etudiant.getGroupe().getId() == groupe_id) {
+                 count++;
+             }
+
+         }
+        if (count == 0) {
+            GroupeDAO.remove(groupe_id);
+            request.setAttribute("remove", "success");
+        } else {
+            request.setAttribute("remove", "failed");
+        }
+
+        // Récupérer les groupes
+        List<Groupe> groupes = GroupeDAO.getAll();
+
+        // Ajouter les étudiants à la requête pour affichage
+        request.setAttribute("groupes", groupes);
+        request.setAttribute("add", "");
+        request.setAttribute("edit", "");
+
         request.setAttribute("content", urlGroupes);
         loadJSP(urlGestionTemplate, request, response);
     }

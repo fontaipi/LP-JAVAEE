@@ -7,13 +7,12 @@
 
 <jsp:useBean id="groupes" type="java.util.List<projet.data.Groupe>" scope="request"/>
 
-
 <form action="<%=request.getContextPath()%>/do/createEtudiant" method="post">
     <input name="nom" type="text" placeholder="Nom">
     <input name="prenom" type="text" placeholder="Prénom">
     <select name="groupe">
         <% for (Groupe groupe : groupes) {%>
-        <option value="<%=groupe.getId()%>"><%=groupe.getNom()%></option>
+            <option value="<%=groupe.getId()%>"><%=groupe.getNom()%></option>
         <% } %>
     </select>
     <input type="submit" name="submit">
