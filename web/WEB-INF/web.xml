@@ -82,6 +82,18 @@
             <param-value>/WEB-INF/JSP/editEtudiant.jsp</param-value>
         </init-param>
         <init-param>
+            <param-name>urlModules</param-name>
+            <param-value>/WEB-INF/JSP/modules.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>urlCreateModule</param-name>
+            <param-value>/WEB-INF/JSP/createModule.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>urlEditModule</param-name>
+            <param-value>/WEB-INF/JSP/editModule.jsp</param-value>
+        </init-param>
+        <init-param>
             <param-name>urlConsultationAbsences</param-name>
             <param-value>/WEB-INF/JSP/absences/consultationAbsences.jsp</param-value>
         </init-param>

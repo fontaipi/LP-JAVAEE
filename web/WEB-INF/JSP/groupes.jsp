@@ -14,8 +14,10 @@
 <div class="alert alert-success" role="alert">
     Création réussie !
 </div>
-<% } else { %>
-
+<% } else if (add == "failed") { %>
+<div class="alert alert-danger" role="alert">
+    Échec lors de la création !
+</div>
 <% } %>
 
 <% if (edit == "success") {%>

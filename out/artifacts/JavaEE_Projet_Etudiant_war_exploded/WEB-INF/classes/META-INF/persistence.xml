@@ -20,7 +20,7 @@
 
             <!-- JDBC connection properties -->
             <!--  en SqlLite, sur un fichier de votre arborescence (en windows c:/etc...) -->
-            <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:C:\Users\Pierre\JavaEE-Projet-Etudiant\web\WEB-INF\data\MI4BDsqlite.db"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:C:\Users\pierr\workspace\JAVA-EE\JavaEE-Projet-Etudiant\web\WEB-INF\data\MI4BDsqlite.db"/>
             <property name="javax.persistence.jdbc.user" value=""/>
             <!--property name="eclipselink.jdbc.password" value=""/-->
             <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
@@ -89,9 +89,9 @@
             <!-- url pointant : -->
             <!--  en SqlLite, sur un fichier de votre arborescence (en windows c:/etc...) -->
             <!--  en MySql, sur une url du serveur par exemple en local http;//localhost:3306 -->
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/etudiant79"/>
-            <property name="javax.persistence.jdbc.user" value="etudiant79"/>
-            <property name="eclipselink.jdbc.password" value="(jalmmi4)"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/etudiant77"/>
+            <property name="javax.persistence.jdbc.user" value="etudiant77"/>
+            <property name="eclipselink.jdbc.password" value="1234"/>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
 
             <!-- Propriétés propre à EclipseLink -->

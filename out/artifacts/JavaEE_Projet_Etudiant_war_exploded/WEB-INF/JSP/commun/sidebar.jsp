@@ -48,6 +48,22 @@
 
     <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseModules"
+           aria-expanded="true" aria-controls="collapseModules">
+            <i class="fas fa-paste"></i>
+            <span>Modules</span>
+        </a>
+        <div id="collapseModules" class="collapse" aria-labelledby="headingModules" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Gérer les modules :</h6>
+                <a class="collapse-item" href="<%=request.getContextPath()%>/do/modules">Liste des modules</a>
+                <a class="collapse-item" href="<%=request.getContextPath()%>/do/createModule">Ajouter un module</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Utilities Collapse Menu -->
+    <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGroupes"
            aria-expanded="true" aria-controls="collapseGroupes">
             <i class="fas fa-users"></i>
@@ -71,7 +87,7 @@
         </a>
         <div id="collapseNotes" class="collapse" aria-labelledby="headingNotes" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Custom Utilities:</h6>
+                <h6 class="collapse-header">Gérer les notes:</h6>
                 <a class="collapse-item" href="<%= application.getContextPath()%>/do/consultationNotes">Liste des notes</a>
             </div>
         </div>
@@ -86,7 +102,7 @@
         </a>
         <div id="collapseAbsences" class="collapse" aria-labelledby="headingAbsences" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Custom Utilities:</h6>
+                <h6 class="collapse-header">Gérer les absences:</h6>
                 <a class="collapse-item" href="<%=request.getContextPath()%>/do/consultationAbsences">Liste des abscences</a>
             </div>
         </div>

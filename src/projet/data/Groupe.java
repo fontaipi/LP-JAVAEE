@@ -3,6 +3,7 @@ package projet.data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,8 +23,8 @@ public class Groupe implements Serializable {
 	@OneToMany(mappedBy="groupe", fetch= FetchType.LAZY)	// LAZY = fetch when needed, EAGER = fetch immediately
 	private List<Etudiant> etudiants;
 
-	//@ManyToMany(mappedBy = "groupes", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	//private List<Module> modules = new ArrayList<>();
+	@ManyToMany(mappedBy = "groupes", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	private List<Module> modules = new ArrayList<>();
 	
 	private static final long serialVersionUID = 1L;
 
@@ -51,7 +52,7 @@ public class Groupe implements Serializable {
 	}
 
 
-	/*public List<Module> getModules() {
+	public List<Module> getModules() {
 		return modules;
 	}
 
@@ -60,7 +61,18 @@ public class Groupe implements Serializable {
 			modules.add(module);
 			module.addGroupe(this);
 		}
-	}*/
+	}
+
+    public void removeModule(Module module) {
+        if (!modules.contains(module)) {
+            modules.remove(module);
+            module.removeGroupe(this);
+        }
+    }
+
+    public void removeAllModule() {
+	    modules = new ArrayList<>();
+    }
 
 	@Override
 	public boolean equals(Object o) {

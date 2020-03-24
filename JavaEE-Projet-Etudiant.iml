@@ -30,7 +30,7 @@
           <factory-entry name="Projet_JPA_SQLITE" />
         </datasource-mapping>
         <naming-strategy-map />
-        <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/out/artifacts/ProjetSIL4_etape3_war_exploded/WEB-INF/classes/META-INF/persistence.xml" />
+        <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/META-INF/persistence.xml" />
       </configuration>
     </facet>
   </component>
